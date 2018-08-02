@@ -613,6 +613,204 @@ namespace Chess
             displayArray[7, 7].top.Source = dRook;
         }
 
+        #region Feature
+        public void setBoardFor960Game()
+        {
+            //Sets arrays in starting position
+
+            pieceArray = new piece[8, 8];
+
+            for (int y = 0; y < 8; y++)
+            {
+                for (int x = 0; x < 8; x++)
+                {
+                    if (y == 0)
+                    {
+                        pieceArray[x, 0].color = Color.Light;
+                    }
+
+                    else if (y == 1)
+                    {
+                        pieceArray[x, 1].color = Color.Light;
+                        pieceArray[x, 1].job = Job.Pawn;
+                        pieceArray[x, 1].virgin = true;
+                        displayArray[x, 1].top.Source = matchPicture(pieceArray[x, 1]);
+                    }
+
+                    else if (y == 6)
+                    {
+                        pieceArray[x, 6].color = Color.Dark;
+                        pieceArray[x, 6].job = Job.Pawn;
+                        pieceArray[x, 6].virgin = true;
+                        displayArray[x, 6].top.Source = matchPicture(pieceArray[x, 6]);
+                    }
+
+                    else if (y == 7)
+                    {
+                        pieceArray[x, 7].color = Color.Dark;
+                    }
+
+                    else
+                    {
+                        displayArray[x, y].top.Source = null;
+                    }
+                }
+            }
+            pieceArray[0, 0].virgin = true;
+            pieceArray[4, 0].virgin = true;
+            pieceArray[7, 0].virgin = true;
+            pieceArray[0, 7].virgin = true;
+            pieceArray[4, 7].virgin = true;
+            pieceArray[7, 7].virgin = true;
+
+            do
+            {
+                randomizeLightPiecesFor960();
+            } while (checkBishopsOppositeTileColors() && checkKingBetweenCastles());
+
+            pieceArray[0, 7].job = pieceArray[0,0].job;
+            pieceArray[1, 7].job = pieceArray[1, 0].job;
+            pieceArray[2, 7].job = pieceArray[2, 0].job;
+            pieceArray[3, 7].job = pieceArray[3, 0].job;
+            pieceArray[4, 7].job = pieceArray[4, 0].job;
+            pieceArray[5, 7].job = pieceArray[5, 0].job;
+            pieceArray[6, 7].job = pieceArray[6, 0].job;
+            pieceArray[7, 7].job = pieceArray[7, 0].job;
+
+            displayArray[0, 0].top.Source = setImageOfPieces(pieceArray[0, 0].job, Color.Light);
+            displayArray[1, 0].top.Source = setImageOfPieces(pieceArray[1, 0].job, Color.Light);
+            displayArray[2, 0].top.Source = setImageOfPieces(pieceArray[2, 0].job, Color.Light);
+            displayArray[3, 0].top.Source = setImageOfPieces(pieceArray[3, 0].job, Color.Light);
+            displayArray[4, 0].top.Source = setImageOfPieces(pieceArray[4, 0].job, Color.Light);
+            displayArray[5, 0].top.Source = setImageOfPieces(pieceArray[5, 0].job, Color.Light);
+            displayArray[6, 0].top.Source = setImageOfPieces(pieceArray[6, 0].job, Color.Light);
+            displayArray[7, 0].top.Source = setImageOfPieces(pieceArray[7, 0].job, Color.Light);
+            displayArray[0, 7].top.Source = setImageOfPieces(pieceArray[7, 0].job, Color.Dark);
+            displayArray[1, 7].top.Source = dKnight;
+            displayArray[2, 7].top.Source = dBishop;
+            displayArray[3, 7].top.Source = dQueen;
+            displayArray[4, 7].top.Source = dKing;
+            displayArray[5, 7].top.Source = dBishop;
+            displayArray[6, 7].top.Source = dKnight;
+            displayArray[7, 7].top.Source = dRook;
+        }
+
+        public void randomizeLightPiecesFor960()
+        {
+            bool rook1 = false;
+            bool rook2 = false;
+            bool king = false;
+            bool queen = false;
+            bool knight1 = false;
+            bool knight2 = false;
+            bool bishop1 = false;
+            bool bishop2 = false;
+            Random ran = new Random();
+            var values = Enum.GetValues(typeof(Job));
+
+//Stopped here. Trying to randomize pieces
+            for (int i = 0; i < 8; i++)
+            {
+                Job j = (Job)values.GetValue(ran.Next(values.Length));
+                giveJob(j, i);
+            }
+
+            pieceArray[0, 0].job = Job.Rook;
+            pieceArray[1, 0].job = Job.Knight;
+            pieceArray[2, 0].job = Job.Bishop;
+            pieceArray[3, 0].job = Job.Queen;
+            pieceArray[4, 0].job = Job.King;
+            pieceArray[5, 0].job = Job.Bishop;
+            pieceArray[6, 0].job = Job.Knight;
+            pieceArray[7, 0].job = Job.Rook;
+        }
+
+        public void giveJob(Job j, int xPos)
+        {
+            pieceArray[xPos, 0].job = j;
+        }
+
+        public bool checkKingBetweenCastles()
+        {
+            return true;
+        }
+
+        public bool checkBishopsOppositeTileColors()
+        {
+            return true;
+        }
+
+        public BitmapImage setImageOfPieces(Job j, Color c)
+        {
+            if (j == Job.King)
+            {
+                if (c == Color.Light)
+                {
+                    return lKing;
+                }
+                else
+                {
+                    return dKing;
+                }
+            }
+            else if (j == Job.Queen)
+            {
+                if (c == Color.Light)
+                {
+                    return lQueen;
+                }
+                else
+                {
+                    return dQueen;
+                }
+            }
+            else if (j == Job.Bishop)
+            {
+                if (c == Color.Light)
+                {
+                    return lBishop;
+                }
+                else
+                {
+                    return dBishop;
+                }
+            }
+            else if (j == Job.Knight)
+            {
+                if (c == Color.Light)
+                {
+                    return lKnight;
+                }
+                else
+                {
+                    return dKnight;
+                }
+            }
+            else if (j == Job.Rook)
+            {
+                if (c == Color.Light)
+                {
+                    return lRook;
+                }
+                else
+                {
+                    return dRook;
+                }
+            }
+            else
+            {
+                if(c == Color.Light)
+                {
+                    return lPawn;
+                }
+                else
+                {
+                    return dPawn;
+                }
+            }
+        }
+
+        #endregion
         private List<coordinate> getDarkPieces(piece[,] board)
         {
             //searches through pieceArray and returns list of coordinates where all dark pieces are located
