@@ -98,3 +98,6 @@ C:\Users\robert.palagano\OneDrive - School Board of Polk County, FL\Documents\Gi
 C:\Users\robert.palagano\OneDrive - School Board of Polk County, FL\Documents\GitHub\Chess\Chess\obj\Release\Chess.g.resources
 C:\Users\robert.palagano\OneDrive - School Board of Polk County, FL\Documents\GitHub\Chess\Chess\obj\Release\Chess.Properties.Resources.resources
 C:\Users\robert.palagano\OneDrive - School Board of Polk County, FL\Documents\GitHub\Chess\Chess\obj\Release\Chess.csproj.GenerateResource.Cache
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Chess\bin\Release\Chess.exe.config
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Chess\obj\Release\Chess.exe
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Chess\obj\Release\Chess.pdb
