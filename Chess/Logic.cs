@@ -614,6 +614,7 @@ namespace Chess
         }
 
         #region Feature
+
         public void setBoardFor960Game()
         {
             //Sets arrays in starting position
@@ -695,34 +696,84 @@ namespace Chess
             displayArray[7, 7].top.Source = dRook;
         }
 
-        public void randomizeLightPiecesFor960()
+        public bool randomizeLightPiecesFor960()
         {
-            bool rook1 = false;
-            bool rook2 = false;
-            bool king = false;
-            bool queen = false;
-            bool knight1 = false;
-            bool knight2 = false;
-            bool bishop1 = false;
-            bool bishop2 = false;
+            string piecesString = "rrhhbbqk";
+            char currentLetter = ' ';
+            bool match = false;
             Random ran = new Random();
             var values = Enum.GetValues(typeof(Job));
 
-//Stopped here. Trying to randomize pieces
             for (int i = 0; i < 8; i++)
             {
-                Job j = (Job)values.GetValue(ran.Next(values.Length));
-                giveJob(j, i);
+                Job j;
+                do
+                {
+                    j = (Job)values.GetValue(ran.Next(values.Length));
+                    if (j == Job.Rook)
+                    {
+                        currentLetter = 'r';
+                    }
+                    else if (j == Job.Knight)
+                    {
+                        currentLetter = 'h';
+                    }
+                    else if (j == Job.Bishop)
+                    {
+                        currentLetter = 'b';
+                    }
+                    else if (j == Job.Queen)
+                    {
+                        currentLetter = 'q';
+                    }
+                    else if (j == Job.King)
+                    {
+                        currentLetter = 'k';
+                    }
+                    else
+                    {
+                        currentLetter = ' ';
+                    }
+
+                    if (piecesString.Contains(currentLetter))
+                    {
+                        for (int ind = 0; ind < piecesString.Length; ind++)
+                        {
+                            if (piecesString[ind] == currentLetter)
+                            {
+                                piecesString = piecesString.Remove(ind,1);
+                                giveJob(j, i);
+                                match = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        break;
+                    }
+                } while (!match);
+                match = false;
             }
 
-            pieceArray[0, 0].job = Job.Rook;
-            pieceArray[1, 0].job = Job.Knight;
-            pieceArray[2, 0].job = Job.Bishop;
-            pieceArray[3, 0].job = Job.Queen;
-            pieceArray[4, 0].job = Job.King;
-            pieceArray[5, 0].job = Job.Bishop;
-            pieceArray[6, 0].job = Job.Knight;
-            pieceArray[7, 0].job = Job.Rook;
+            //pieceArray[0, 0].job = Job.Rook;
+            //pieceArray[1, 0].job = Job.Knight;
+            //pieceArray[2, 0].job = Job.Bishop;
+            //pieceArray[3, 0].job = Job.Queen;
+            //pieceArray[4, 0].job = Job.King;
+            //pieceArray[5, 0].job = Job.Bishop;
+            //pieceArray[6, 0].job = Job.Knight;
+            //pieceArray[7, 0].job = Job.Rook;
+
+            for (int i = 0; i < pieceArray.Length; i++)
+            {
+                if (pieceArray[i, 0].job == Job.None)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void giveJob(Job j, int xPos)
@@ -732,12 +783,63 @@ namespace Chess
 
         public bool checkKingBetweenCastles()
         {
-            return true;
+            int castleOneIndex = -1;
+            bool oneOnLeft = false;
+            int castleTwoIndex = -1;
+            bool oneOnRight = false;
+            int kingIndex = -1;
+
+            for (int i = 0; i < pieceArray.Length; i++)
+            {
+                if (pieceArray[i,0].job == Job.Rook)
+                {
+                    if(castleOneIndex != -1)
+                    {
+                        castleTwoIndex = i;
+                    }
+                    else
+                    {
+                        castleOneIndex = i;
+                    }
+                }
+                else if (pieceArray[i,0].job == Job.King)
+                {
+                    kingIndex = i;
+                }
+            }
+
+            if ((castleOneIndex > kingIndex) || (castleTwoIndex > kingIndex))
+            {
+                oneOnRight = true;
+            }
+            else if ((castleOneIndex < kingIndex) || (castleTwoIndex < kingIndex))
+            {
+                oneOnLeft = true;
+            }
+
+            return oneOnLeft && oneOnRight;
         }
 
         public bool checkBishopsOppositeTileColors()
         {
-            return true;
+            bool bishopOnLight = false;
+            bool bishopOnDark = false;
+            for (int i = 0; i < pieceArray.Length; i++)
+            {
+                if (pieceArray[i,0].job == Job.Bishop)
+                {
+                    if (i % 2 != 0)
+                    {
+                        bishopOnDark = true;
+                    }
+                    else
+                    {
+                        bishopOnLight = true;
+                    }
+                }
+            }
+
+            return bishopOnLight && bishopOnDark;
         }
 
         public BitmapImage setImageOfPieces(Job j, Color c)
@@ -811,6 +913,7 @@ namespace Chess
         }
 
         #endregion
+
         private List<coordinate> getDarkPieces(piece[,] board)
         {
             //searches through pieceArray and returns list of coordinates where all dark pieces are located
