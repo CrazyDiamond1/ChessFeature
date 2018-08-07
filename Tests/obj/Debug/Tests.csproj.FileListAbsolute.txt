@@ -1,0 +1,11 @@
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\bin\Debug\Tests.dll
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\bin\Debug\Tests.pdb
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\bin\Debug\Chess.exe
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\bin\Debug\Chess.pdb
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\bin\Debug\Chess.exe.config
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\obj\Debug\Tests.csprojAssemblyReference.cache
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\obj\Debug\Tests.csproj.CoreCompileInputs.cache
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\obj\Debug\Tests.csproj.CopyComplete
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\obj\Debug\Tests.dll
+C:\Users\Noah Tanner\Desktop\Neumont\SoftwareProjectsInExistingCode\Chess - Add A Feature\Tests\obj\Debug\Tests.pdb

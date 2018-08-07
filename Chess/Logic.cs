@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -215,7 +216,7 @@ namespace Chess
         {
             this.mWindow = mw;
         }
-
+        
         public void createDisplayArray()
         {
             //Creates array that handles all visuals
@@ -615,7 +616,7 @@ namespace Chess
 
         #region Feature
 
-        public void setBoardFor960Game()
+        public void setBoardForNineSixtyGame()
         {
             //Sets arrays in starting position
 
@@ -667,9 +668,9 @@ namespace Chess
             do
             {
                 randomizeLightPiecesFor960();
-            } while (checkBishopsOppositeTileColors() && checkKingBetweenCastles());
+            } while (!checkKingBetweenCastles() || !checkBishopsOppositeTileColors());
 
-            pieceArray[0, 7].job = pieceArray[0,0].job;
+            pieceArray[0, 7].job = pieceArray[0, 0].job;
             pieceArray[1, 7].job = pieceArray[1, 0].job;
             pieceArray[2, 7].job = pieceArray[2, 0].job;
             pieceArray[3, 7].job = pieceArray[3, 0].job;
@@ -686,14 +687,14 @@ namespace Chess
             displayArray[5, 0].top.Source = setImageOfPieces(pieceArray[5, 0].job, Color.Light);
             displayArray[6, 0].top.Source = setImageOfPieces(pieceArray[6, 0].job, Color.Light);
             displayArray[7, 0].top.Source = setImageOfPieces(pieceArray[7, 0].job, Color.Light);
-            displayArray[0, 7].top.Source = setImageOfPieces(pieceArray[7, 0].job, Color.Dark);
-            displayArray[1, 7].top.Source = dKnight;
-            displayArray[2, 7].top.Source = dBishop;
-            displayArray[3, 7].top.Source = dQueen;
-            displayArray[4, 7].top.Source = dKing;
-            displayArray[5, 7].top.Source = dBishop;
-            displayArray[6, 7].top.Source = dKnight;
-            displayArray[7, 7].top.Source = dRook;
+            displayArray[0, 7].top.Source = setImageOfPieces(pieceArray[0, 7].job, Color.Dark);
+            displayArray[1, 7].top.Source = setImageOfPieces(pieceArray[1, 7].job, Color.Dark);
+            displayArray[2, 7].top.Source = setImageOfPieces(pieceArray[2, 7].job, Color.Dark);
+            displayArray[3, 7].top.Source = setImageOfPieces(pieceArray[3, 7].job, Color.Dark);
+            displayArray[4, 7].top.Source = setImageOfPieces(pieceArray[4, 7].job, Color.Dark);
+            displayArray[5, 7].top.Source = setImageOfPieces(pieceArray[5, 7].job, Color.Dark);
+            displayArray[6, 7].top.Source = setImageOfPieces(pieceArray[6, 7].job, Color.Dark);
+            displayArray[7, 7].top.Source = setImageOfPieces(pieceArray[7, 7].job, Color.Dark);
         }
 
         public bool randomizeLightPiecesFor960()
@@ -704,7 +705,7 @@ namespace Chess
             Random ran = new Random();
             var values = Enum.GetValues(typeof(Job));
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < pieceArray.GetLength(0); i++)
             {
                 Job j;
                 do
@@ -730,6 +731,10 @@ namespace Chess
                     {
                         currentLetter = 'k';
                     }
+                    else if (j == Job.Pawn)
+                    {
+                        currentLetter = 'p';
+                    }
                     else
                     {
                         currentLetter = ' ';
@@ -748,39 +753,30 @@ namespace Chess
                             }
                         }
                     }
-                    else
-                    {
-                        break;
-                    }
                 } while (!match);
                 match = false;
             }
 
-            //pieceArray[0, 0].job = Job.Rook;
-            //pieceArray[1, 0].job = Job.Knight;
-            //pieceArray[2, 0].job = Job.Bishop;
-            //pieceArray[3, 0].job = Job.Queen;
-            //pieceArray[4, 0].job = Job.King;
-            //pieceArray[5, 0].job = Job.Bishop;
-            //pieceArray[6, 0].job = Job.Knight;
-            //pieceArray[7, 0].job = Job.Rook;
-
-            for (int i = 0; i < pieceArray.Length; i++)
+            if (piecesString.Trim() != "")
             {
-                if (pieceArray[i, 0].job == Job.None)
-                {
-                    return false;
-                }
+                return false;
             }
 
-            return true;
+            //if (checkBishopsOppositeTileColors() && checkKingBetweenCastles())
+            //{
+                return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
         }
-
+        
         public void giveJob(Job j, int xPos)
         {
             pieceArray[xPos, 0].job = j;
         }
-
+        //Valid if true
         public bool checkKingBetweenCastles()
         {
             int castleOneIndex = -1;
@@ -789,48 +785,59 @@ namespace Chess
             bool oneOnRight = false;
             int kingIndex = -1;
 
-            for (int i = 0; i < pieceArray.Length; i++)
+            for (int i = 0; i < pieceArray.GetLength(0); i++)
             {
                 if (pieceArray[i,0].job == Job.Rook)
                 {
-                    if(castleOneIndex != -1)
+                    if(castleOneIndex == -1)
+                    {
+                        castleOneIndex = i;
+                    }
+                    else if(castleOneIndex != -1)
                     {
                         castleTwoIndex = i;
                     }
-                    else
+                    else if(kingIndex != -1 && castleOneIndex != -1 && castleTwoIndex != -1)
                     {
-                        castleOneIndex = i;
+                        break;
                     }
                 }
                 else if (pieceArray[i,0].job == Job.King)
                 {
                     kingIndex = i;
                 }
+
             }
 
-            if ((castleOneIndex > kingIndex) || (castleTwoIndex > kingIndex))
+            if (kingIndex != -1 && castleOneIndex != -1 && castleTwoIndex != -1)
             {
-                oneOnRight = true;
-            }
-            else if ((castleOneIndex < kingIndex) || (castleTwoIndex < kingIndex))
-            {
-                oneOnLeft = true;
+                if ((castleOneIndex > kingIndex) || (castleTwoIndex > kingIndex))
+                {
+                    oneOnRight = true;
+                }
+                if ((castleOneIndex < kingIndex) || (castleTwoIndex < kingIndex))
+                {
+                    oneOnLeft = true;
+                }
             }
 
             return oneOnLeft && oneOnRight;
         }
-
+        //Valid if true
         public bool checkBishopsOppositeTileColors()
         {
             bool bishopOnLight = false;
             bool bishopOnDark = false;
-            for (int i = 0; i < pieceArray.Length; i++)
+            for (int i = 0; i < pieceArray.GetLength(0); i++)
             {
                 if (pieceArray[i,0].job == Job.Bishop)
                 {
                     if (i % 2 != 0)
                     {
                         bishopOnDark = true;
+                    }
+                    else if(bishopOnDark && bishopOnLight){
+                        break;
                     }
                     else
                     {

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
 using static Chess.Logic;
 
 namespace Chess
@@ -12,6 +13,9 @@ namespace Chess
     {
         private Logic game;
         private Color colorChecked;
+        private BitmapImage lightHorse;
+        private BitmapImage darkHorse;
+
 
         public NewGame(Logic l)
         {
@@ -21,6 +25,8 @@ namespace Chess
             ipBox.Text = game.IP;
             portBox.Text = game.port.ToString();
             NewGameWindow.horse.FlowDirection = FlowDirection.RightToLeft;
+            lightHorse = new BitmapImage(new Uri(@"Resources\lKnight.png", UriKind.Relative));
+            darkHorse = new BitmapImage(new Uri(@"Resources\dKnight.png", UriKind.Relative));
         }
 
         private void cancelBtn_Click(object sender, RoutedEventArgs e)
@@ -63,9 +69,17 @@ namespace Chess
                     }
                 }
             }
-            else //Not Network Game
+            else if (traditionalBtn.IsChecked == true) //Not Network Game
             {
                 game.setBoardForNewGame();
+            }
+            else if (c960Btn.IsChecked == true)
+            {
+                game.setBoardForNineSixtyGame();
+            }
+            else
+            {
+                canceled = true;
             }
 
             //Confirmed new game starting
@@ -164,6 +178,15 @@ namespace Chess
         private void Mouse_Move(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Point mousePosition = e.GetPosition(NewGameWindow);
+
+            if (darkBtn.IsChecked == true)
+            {
+                horse.Source = darkHorse;
+            }
+            else if (lightBtn.IsChecked == true)
+            {
+                horse.Source = lightHorse;
+            }
 
             if (mousePosition.X > 265)
             {
